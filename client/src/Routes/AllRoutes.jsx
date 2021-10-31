@@ -24,10 +24,7 @@ const Allroutes = () => {
                 <Route exact path="/edit" component={EditUserPage} />
                 <Route exact path="/open" component={OpenFilePage} />
                 <Route exact path="/share" component={SharePage} />
-                <Route>
-                    <NotFound />
-                </Route>
-
+                <Route component={NotFound} />
             </Switch>
         </div >
     )

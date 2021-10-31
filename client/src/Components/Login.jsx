@@ -52,7 +52,12 @@ const Login = () => {
                     dispatch(getUserSuccess(payload))
                     saveData("email", email)
                     saveData("name", name)
-
+                    // swal("Login success", "success", window.close(1000));
+                    Alert.success('Login success', {
+                        position: 'top-right',
+                        effect: 'slide',
+                        timeout: 1500
+                    })
                     redirectPage()
                 }
             })
@@ -109,7 +114,7 @@ const Login = () => {
                 </Typography>
                 <Button className={classes.secondBtn} variant="contained" color="primary" onClick={() => { history.push("/registration") }}>Create Account</Button>
             </Grid>
-            <Alert stack={{ limit: 3 }} />
+            <Alert stack={{ limit: 1 }} />
         </Grid >
     )
 }
