@@ -58,11 +58,18 @@ const shareFile = async (req, res) => {
     const user = await UserUpload.findOne(email);
     if (user !== null) {
         try {
-            await FileUpload.findByIdAndUpdate({ _id: id }, { $push: { shared: email.email } }, { new: true });
-            res.status(200).json({
-                status: "success",
-                message: "share success"
-            })
+            const fileFind = await FileUpload.findOne({ _id: id })
+            const arrayShared = fileFind.shared
+            if (arrayShared.includes(email.email) === true) {
+                return res.status(304).json({ message: "No" })
+            } else {
+                await FileUpload.findByIdAndUpdate({ _id: id }, { $push: { shared: email.email } }, { new: true });
+                return res.status(200).json({
+                    status: "success",
+                    message: "share success"
+                })
+            }
+
         } catch (error) {
             res.status(500).json({
                 status: "fail",

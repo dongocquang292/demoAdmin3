@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { deleteFileFailure, deleteFileRequest, deleteFileSuccess, getFileListFailure, getFileListRequest, getFileListSuccess } from '../Redux/app/action';
 import { loadData } from '../utils/localStorage';
-import { Button, FormControl, Grid, InputLabel, MenuItem, Select, Typography } from '@material-ui/core';
+import { FormControl, Grid, InputLabel, MenuItem, Select, Typography } from '@material-ui/core';
 import styles from "../Styles/Dashboard.module.css";
 import { Redirect } from 'react-router';
 import Alert from 'react-s-alert';
@@ -70,7 +70,6 @@ const Dashboard = () => {
     }
 
     const handleShare = async (id, emailSL) => {
-        console.log("Email dc chon: ", emailSL);
         let config = {
             "email": emailSL,
         }
@@ -84,7 +83,7 @@ const Dashboard = () => {
             await axios.post(`/api/files/share/`, config, {
                 params: id
             }).then((res) => {
-                console.log(res);
+                console.log("res: ", res.status);
                 if (res.status === 200) {
                     Alert.success('Share success', {
                         position: 'top-right',
@@ -92,13 +91,19 @@ const Dashboard = () => {
                         timeout: 1500
                     })
                 } else {
-                    Alert.error('Share fail', {
+                    Alert.error('Fail to share', {
                         position: 'top-right',
                         effect: 'slide',
                         timeout: 1500
                     })
                 }
-            })
+            }).catch(err =>
+                Alert.error(`This User Has Shared`, {
+                    position: 'top-right',
+                    effect: 'slide',
+                    timeout: 2000
+                })
+            )
         }
         setEmailSelected("")
     }
@@ -157,7 +162,7 @@ const Dashboard = () => {
                                     <Grid className={styles.listItem} container alignItems="center" justify="flex-start" md={1} sm={1} xs={1}>{checkSize(el.fileSize)}</Grid>
                                     <Grid className={styles.listItem} container alignItems="center" justify="flex-start" md={1} sm={1} xs={1}>{el.type}</Grid>
                                     <Grid className={styles.listItem} container justify="center" md={2} sm={2} xs={2}>
-                                        <Button className={styles.btn} variant="contained" color="primary" onClick={() => handleShowDialog(el.fileName)}>Open File</Button>
+                                        <button className={styles.btn} variant="contained" color="primary" onClick={() => handleShowDialog(el.fileName)}>Open File</button>
                                     </Grid>
                                     <Grid className={styles.listItem} container justify="center" md={2} sm={2} xs={2}>
                                         <FormControl fullWidth>
@@ -177,7 +182,7 @@ const Dashboard = () => {
                                             </Select>
                                             {
                                                 emailSelected !== "" ?
-                                                    <Button onClick={() => handleShare(el._id, emailSelected)}>Share</Button>
+                                                    <button className={styles.btnShare} onClick={() => handleShare(el._id, emailSelected)}>Share</button>
                                                     : null
                                             }
 
@@ -185,12 +190,12 @@ const Dashboard = () => {
 
                                     </Grid>
                                     <Grid className={styles.listItem} container justify="center" md={2} sm={2} xs={2}>
-                                        <Button variant="contained"
+                                        <button variant="contained"
                                             color="primary"
                                             onClick={() => handleDelete(el._id)}
                                             className={styles.btn}
                                         >   Delete File
-                                        </Button>
+                                        </button>
                                     </Grid>
                                 </Grid>
                             ) : null

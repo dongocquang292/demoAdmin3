@@ -11,6 +11,8 @@ app.use(express.static('public'));
 
 // static webpack
 app.use(express.static(path.join(__dirname, '../dist')))
+
+
 app.use(cors());
 app.use(cookieParser());
 app.use(express.json())
@@ -21,11 +23,6 @@ app.use(function (req, res, next) {
 });
 
 app.use("/", indexRoute)
-
-// app.get('*', function (request, response) {
-//   request.sendFile('http://localhost:8080/index.html')
-// })
-
 
 // error handler middleware
 app.use((error, req, res, next) => {

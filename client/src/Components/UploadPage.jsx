@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProgress, postFileFailure, postFileRequest, postFileSuccess } from '../Redux/app/action';
 import axios from 'axios';
@@ -59,12 +59,17 @@ const UploadPage = () => {
             name: loadData("name"),
             email: loadData("email")
         }
-        Alert.success('Login success', {
-            position: 'top-right',
-            effect: 'slide',
-            timeout: 1500
-        })
         dispatch(getUserSuccess(payload))
+    }
+
+    const checkLogin = () => {
+        if (loadData("email") !== "guest") {
+            Alert.success(`Login Success`, {
+                position: 'top-right',
+                effect: 'slide',
+                timeout: 1500
+            })
+        }
     }
 
     let file;
@@ -110,6 +115,10 @@ const UploadPage = () => {
     const handleCardReset = () => {
         dispatch(postFileSuccess(""))
     }
+
+    useEffect(() => {
+        checkLogin()
+    }, []);
 
     return (
         <Grid container justify="center" >

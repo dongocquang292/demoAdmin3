@@ -14,6 +14,7 @@ const Allroutes = () => {
     return (
         <div>
             <Switch>
+                {/* <Route exact path="/*" component={UploadPage} /> */}
                 <Route exact path="/" component={Login} />
                 <Route exact path="/upload" component={UploadPage} />
                 <Route exact path="/registration" component={Registration} />
@@ -26,6 +27,7 @@ const Allroutes = () => {
                 <Route>
                     <NotFound />
                 </Route>
+
             </Switch>
         </div >
     )

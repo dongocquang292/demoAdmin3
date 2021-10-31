@@ -6,10 +6,12 @@ module.exports = {
   output: {
     filename: '[name].js',
     path: path.join(__dirname, '../dist'),
+    publicPath: '/',
     clean: true // xoa di nhung file thua
   },
   watch: true,// đây là watch mode
   devServer: {
+    historyApiFallback: true,
     contentBase: path.join(__dirname, '../dist'),
     hot: true,
   },
