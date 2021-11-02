@@ -3,23 +3,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { deleteFileFailure, deleteFileRequest, deleteFileSuccess, getFileListFailure, getFileListRequest, getFileListSuccess } from '../Redux/app/action';
 import { loadData } from '../utils/localStorage';
-import { FormControl, Grid, InputLabel, MenuItem, Select, Typography } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 import styles from "../Styles/Dashboard.module.css";
-import { Redirect } from 'react-router';
 import Alert from 'react-s-alert';
-
 import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/slide.css';
+import { BtnShare } from './BtnShare';
+import { Login } from './Login';
 const Dashboard = () => {
     const dispatch = useDispatch()
     const [fileList, setFileList] = useState([])
     const [userList, setUserList] = useState([])
-    const [emailSelected, setEmailSelected] = useState("")
+    // const [emailSelected, setEmailSelected] = useState("")
     const [fileOpen, setFileOpen] = useState(false)
     const [fileName, setFileName] = useState("")
     const email = loadData("email")
     const isAuth = useSelector((state) => state.auth.isAuth)
-
+    console.log("auth: ", isAuth);
 
     const handleShowDialog = (name) => {
         setFileName(name)
@@ -69,44 +69,9 @@ const Dashboard = () => {
             })
     }
 
-    const handleShare = async (id, emailSL) => {
-        let config = {
-            "email": emailSL,
-        }
-        if (emailSL === email) {
-            Alert.warning(`Can't share to yourself`, {
-                position: 'top-right',
-                effect: 'slide',
-                timeout: 1500
-            })
-        } else {
-            await axios.post(`/api/files/share/`, config, {
-                params: id
-            }).then((res) => {
-                console.log("res: ", res.status);
-                if (res.status === 200) {
-                    Alert.success('Share success', {
-                        position: 'top-right',
-                        effect: 'slide',
-                        timeout: 1500
-                    })
-                } else {
-                    Alert.error('Fail to share', {
-                        position: 'top-right',
-                        effect: 'slide',
-                        timeout: 1500
-                    })
-                }
-            }).catch(err =>
-                Alert.error(`This User Has Shared`, {
-                    position: 'top-right',
-                    effect: 'slide',
-                    timeout: 2000
-                })
-            )
-        }
-        setEmailSelected("")
-    }
+
+
+
 
     const checkSize = (num) => {
         if (num < 1024) {
@@ -129,7 +94,7 @@ const Dashboard = () => {
     // }, []);
 
     if (isAuth !== true) {
-        return <Redirect to="/" />
+        return <Login />
     }
 
     if (email !== "guest" && fileList.length === 0) {
@@ -165,7 +130,7 @@ const Dashboard = () => {
                                         <button className={styles.btn} variant="contained" color="primary" onClick={() => handleShowDialog(el.fileName)}>Open File</button>
                                     </Grid>
                                     <Grid className={styles.listItem} container justify="center" md={2} sm={2} xs={2}>
-                                        <FormControl fullWidth>
+                                        {/* <FormControl fullWidth>
                                             <InputLabel id="email-select-label">Email</InputLabel>
                                             <Select
                                                 labelId="email-select-label"
@@ -179,15 +144,20 @@ const Dashboard = () => {
                                                     ) : null
                                                 }
 
-                                            </Select>
+                                            </Select >
                                             {
                                                 emailSelected !== "" ?
                                                     <button className={styles.btnShare} onClick={() => handleShare(el._id, emailSelected)}>Share</button>
                                                     : null
                                             }
+                                        </FormControl> */}
 
-                                        </FormControl>
-
+                                        <BtnShare userList={userList} id={el._id} />
+                                        {/* {
+                                            emailSelected !== "" ?
+                                                <button className={styles.btnShare} onClick={() => handleShare(el._id, emailSelected)}>Share</button>
+                                                : null
+                                        } */}
                                     </Grid>
                                     <Grid className={styles.listItem} container justify="center" md={2} sm={2} xs={2}>
                                         <button variant="contained"
@@ -208,9 +178,9 @@ const Dashboard = () => {
                                     open
                                     onClick={handleShowDialog} >
                                     <img src={`http://localhost:8080/${fileName}`} className={styles.imgDialog} alt="" onClick={handleShowDialog}></img>
+                                    {/* <DocViewer documents={`http://localhost:8080/${fileName}`} /> */}
                                 </dialog>
                             )
-
                         }
 
                     </Grid > : <Typography className={styles.emptyList} variant="p">No files have been uploaded</Typography>

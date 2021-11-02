@@ -13,7 +13,7 @@ function saveData(key, data) {
 }
 
 function clearData() {
-    localStorage.clear();
+    localStorage.clear()
 }
 
-export { loadData, saveData, clearData}
+export { loadData, saveData, clearData }

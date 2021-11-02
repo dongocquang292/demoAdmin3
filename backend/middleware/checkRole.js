@@ -11,7 +11,7 @@ const checkRole = function (req, res, next) {
             if (err) {
                 res.status(401).send('Unauthorized: Invalid token');
             } else {
-                if (decoded.role === 1) {
+                if (decoded.role === 'admin') {
                     next();
                 } else {
                     res.status(500).json({ message: "Not admin" })

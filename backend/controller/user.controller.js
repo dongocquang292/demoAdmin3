@@ -86,6 +86,7 @@ const updateUser = async (req, res) => {
             let userbody = {
                 "name": req.body.name,
                 "email": req.body.email,
+                "role": req.body.role,
                 "password": hash
             }
             const user = UserUpload.findByIdAndUpdate(id, userbody, { new: true }).lean().exec()
@@ -101,7 +102,6 @@ const updateUser = async (req, res) => {
 // Delete User
 const deleteUser = async (req, res) => {
     try {
-        const email = req.email;
         const user = await UserUpload.findByIdAndDelete(req.params.id).lean().exec()
         return res.status(200).json({ status: 'success', data: user })
     } catch (err) {

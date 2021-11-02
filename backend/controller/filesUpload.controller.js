@@ -15,8 +15,8 @@ const UploadFile = async (req, res) => {
         const email = req.body.email;
         const fileName = req.file.originalname
         const fileSize = req.file.size
-        const typeFile = req.file.mimetype
-        const filePackage = await FileUpload.create({ email: email, fileName: fileName, fileSize: fileSize, type: typeFile });
+        const typeFile = req.file.mimetype.split("/")
+        const filePackage = await FileUpload.create({ email: email, fileName: fileName, fileSize: fileSize, type: typeFile[0], shared: email });
         return res.status(200).json({ status: 'success', data: filePackage, img: `http://localhost:8080/${fileName}` })
     } catch (err) {
         return res.status(500).json({ status: 'fail', message: err.message })

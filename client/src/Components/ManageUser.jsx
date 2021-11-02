@@ -17,7 +17,6 @@ const ManageUser = () => {
     const email = loadData("email")
     const isAuth = useSelector((state) => state.auth.isAuth)
     const history = useHistory();
-
     const handleDelete = (_id) => {
         dispatch(deleteUserRequest())
         axios.delete(`/api/users/${_id}`)
@@ -67,8 +66,8 @@ const ManageUser = () => {
                     <Grid container md={8} sm={8} xs={8} justify="center">
                         <Grid container justify="center" className={styles.header}>
                             <Grid container justify="flex-start" md={3} sm={3} xs={3} className={styles.header_option}> User Name</Grid>
-                            <Grid container justify="flex-start" md={3} sm={3} xs={3} className={styles.header_option}> Email</Grid>
-                            {/* <Grid container justify="flex-start" md={2} sm={2} xs={2} className={styles.header_option}> Password</Grid> */}
+                            <Grid container justify="flex-start" md={2} sm={2} xs={2} className={styles.header_option}> Email</Grid>
+                            <Grid container justify="flex-start" md={1} sm={1} xs={1} className={styles.header_option}> Role</Grid>
                             <Grid container justify="center" md={3} sm={3} xs={3} className={styles.header_option}> Edit User</Grid>
                             <Grid container justify="center" md={3} sm={3} xs={3} className={styles.header_option}> Delete User</Grid>
                         </Grid>
@@ -77,8 +76,8 @@ const ManageUser = () => {
 
                                 <Grid container md={12} >
                                     <Grid className={styles.listItem} container alignItems="center" justify="flex-start" md={3} sm={3} xs={3}>{el.name}</Grid>
-                                    <Grid className={styles.listItem} container alignItems="center" justify="flex-start" md={3} sm={3} xs={3}>{el.email}</Grid>
-                                    {/* <Grid className={styles.listItem} container alignItems="center" justify="flex-start" md={2} sm={2} xs={2}>{el.password}</Grid> */}
+                                    <Grid className={styles.listItem} container alignItems="center" justify="flex-start" md={2} sm={2} xs={2}>{el.email}</Grid>
+                                    <Grid className={styles.listItem} container alignItems="center" justify="flex-start" md={1} sm={1} xs={1}>{el.role}</Grid>
                                     <Grid className={styles.listItem} container justify="center" md={3} sm={3} xs={3}>
                                         <Button variant="contained" color="primary" onClick={() => history.push(`/edit/?${el._id}`)}>Edit User</Button>
                                     </Grid>

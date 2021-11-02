@@ -3,7 +3,7 @@ import axios from "axios"
 import { useHistory } from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
 import styles from "../Styles/Form.module.css";
-import { Button, Grid, Typography } from '@material-ui/core';
+import { Button, FormControl, Grid, InputLabel, MenuItem, Select, Typography } from '@material-ui/core';
 import Alert from 'react-s-alert';
 import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/slide.css';
@@ -13,20 +13,20 @@ const EditUserPage = () => {
     const history = useHistory()
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
+    const [role, setRole] = useState("")
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
     const id = window.location.href.split("?")[1]
-
     // get one user to fill
     const getInfo = () => {
         axios.get(`/api/users/:${id}`)
             .then((res) => {
                 setName(res.data.data.name);
                 setEmail(res.data.data.email);
+                // setRole(res.data.data.role)
             })
             .catch((err) => {
                 console.log(err)
-
             })
     }
 
@@ -50,11 +50,13 @@ const EditUserPage = () => {
             let config = {
                 "name": name,
                 "email": email,
+                "role": role,
                 "password": password
             }
 
             axios.patch(`/api/users/:${id}`, config)
                 .then((res) => {
+                    console.log("res mail:", res.data.data);
                     if (res.status === 200) {
                         Alert.success(`Edit User Success`, {
                             position: 'top-right',
@@ -102,6 +104,32 @@ const EditUserPage = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                 />
+                <Grid className={styles.space} />
+                {/* <TextField
+                    type="text"
+                    id="outlined-primary"
+                    variant="outlined"
+                    required={true}
+                    label="Role"
+                    value={role}
+                    onChange={(e) => setRole(e.target.value)}
+                /> */}
+                <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">Role</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={role}
+                        label="Role"
+                        onChange={(e) => { setRole(e.target.value) }}
+
+                    // onChange={handleChange}
+                    >
+                        <MenuItem value={"admin"}>Admin</MenuItem>
+                        <MenuItem value={"user"}>User</MenuItem>
+
+                    </Select>
+                </FormControl>
                 <Grid className={styles.space} />
                 <TextField
                     type="password"

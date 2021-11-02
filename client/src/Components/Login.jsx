@@ -53,11 +53,11 @@ const Login = () => {
                     saveData("email", email)
                     saveData("name", name)
                     // swal("Login success", "success", window.close(1000));
-                    Alert.success('Login success', {
-                        position: 'top-right',
-                        effect: 'slide',
-                        timeout: 1500
-                    })
+                    // Alert.success('Login success', {
+                    //     position: 'top-right',
+                    //     effect: 'slide',
+                    //     timeout: 1500
+                    // })
                     redirectPage()
                 }
             })
@@ -109,6 +109,7 @@ const Login = () => {
 
                 <Button variant="contained" color="primary" onClick={handleClick}>Login</Button>
                 <Box className={styles.divider} />
+                <Grid className={styles.space} />
                 <Typography >
                     Don't have an account ?
                 </Typography>
