@@ -1,6 +1,8 @@
 const { UserUpload } = require("../model/user.model")
 const bcrypt = require("bcrypt")
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
+const Token = require('../model/token.model');
 const dotenv = require('dotenv');
 dotenv.config();
 // Get User
@@ -52,7 +54,6 @@ const login = async (req, res) => {
         // Compare User password with Hash String
         bcrypt.compare(req.body.password, user.password, function (err, result) {
             if (result == true) {
-
                 // create token
                 const payload = { email, role: user.role };
                 const token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
@@ -65,6 +66,7 @@ const login = async (req, res) => {
                     message: "User Authenticated Successfully"
                 }
                 return res.cookie('token', token, { httpOnly: true }).status(200).json({ status: 'success', data })
+
             } else {
                 let data = {
                     response: false,
@@ -87,7 +89,7 @@ const updateUser = async (req, res) => {
                 "name": req.body.name,
                 "email": req.body.email,
                 "role": req.body.role,
-                "password": hash
+                // "password": hash
             }
             const user = UserUpload.findByIdAndUpdate(id, userbody, { new: true }).lean().exec()
             return res.status(200).json({ status: 'success', data: user })
@@ -109,6 +111,76 @@ const deleteUser = async (req, res) => {
     }
 }
 
+// reset password
+const resetPass = async (req, res) => {
+    try {
+        const email = req.body.email;
+        const findEmail = await UserUpload.findOne({ email: email })
+        if (findEmail !== null) {
+            const id = findEmail._id
+            const payload = { id };
+            const token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
+                expiresIn: '1h'
+            })
+            new Token({
+                userId: id,
+                token: token
+            }).save()
+            const link = `${process.env.BASE_URL}/#/pagereset/?${token}`;
+            // const pass = await bcrypt.hash(process.env.PASSWORD_RESET, 10)
+            // await UserUpload.findByIdAndUpdate(id, { password: pass })
+            const transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: 'dongocquang292@gmail.com',
+                    pass: `${process.env.PASS_EMAIL}`
+                }
+            });
+
+            let mailOptions = {
+                from: 'dongocquang292@gmail.com',
+                to: email,
+                subject: 'Test',
+                text: link
+            };
+
+            transporter.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log('Email sent: ' + info.response);
+                }
+            });
+            res.status(200).json({ status: "success", message: 'Check email to reset password' })
+        } else {
+            return res.status(403).json({ status: "fail", message: "Not found email" })
+        }
+
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+const linkCheckReset = async (req, res) => {
+    try {
+        const token = req.body.token;
+        const password = req.body.password;
+        const pass = await bcrypt.hash(password, 10)
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+        const id = decoded.id;
+        const findToken = await Token.findOne({ token: token })
+        if (findToken !== null) {
+            await UserUpload.findByIdAndUpdate({ _id: id }, { password: pass })
+            res.status(200).json({ status: "success", message: "Change password successfully " })
+        } else {
+            res.status(403).json({ status: "fail", message: "Token incorrect" })
+        }
+    } catch (error) {
+        res.status(400).json({ status: "fail", message: "Error" })
+    }
+}
 module.exports = {
-    register, login, getUsers, getOneUser, updateUser, deleteUser
+    register, login, getUsers, getOneUser, updateUser, deleteUser, resetPass, linkCheckReset
 }

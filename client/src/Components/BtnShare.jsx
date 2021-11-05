@@ -1,4 +1,4 @@
-import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
+import { FormControl, Hidden, InputLabel, MenuItem, Select } from '@material-ui/core';
 import React, { useState } from 'react';
 import styles from "../Styles/Dashboard.module.css";
 import Alert from 'react-s-alert';
@@ -11,11 +11,13 @@ const BtnShare = (props) => {
     const userList = props.userList
     const [emailSL, setEmailSL] = useState(undefined)
     const handleShare = async (id, emailSL) => {
+
         let config = {
             "email": emailSL,
+            "emailCurrent": email
         }
         if (emailSL === email) {
-            Alert.warning(`Can't share to yourself`, {
+            return Alert.warning(`Can't share to yourself`, {
                 position: 'top-right',
                 effect: 'slide',
                 timeout: 1500
@@ -24,7 +26,6 @@ const BtnShare = (props) => {
             await axios.post(`/api/files/share/`, config, {
                 params: id
             }).then((res) => {
-                console.log("res: ", res.status);
                 if (res.status === 200) {
                     Alert.success('Share success', {
                         position: 'top-right',
@@ -38,19 +39,32 @@ const BtnShare = (props) => {
                         timeout: 1500
                     })
                 }
-            }).catch(err =>
-                Alert.error(`This User Has Shared`, {
-                    position: 'top-right',
-                    effect: 'slide',
-                    timeout: 2000
-                })
+            }).catch(err => {
+                let errMess = err.message;
+                const pieces = errMess.split(/[\s,]+/);
+                const last = pieces[pieces.length - 1]
+                if (last === "304") {
+                    Alert.error(`This user has shared`, {
+                        position: 'top-right',
+                        effect: 'slide',
+                        timeout: 2000
+                    })
+                } else {
+                    Alert.error(`Must be the owner`, {
+                        position: 'top-right',
+                        effect: 'slide',
+                        timeout: 2000
+                    })
+                }
+            }
             )
         }
         setEmailSL(undefined)
     }
-
+    let x = document.getElementById("email-select")
+    console.log("x: ", x);
     return (
-        <FormControl fullWidth id="myForm">
+        <FormControl fullWidth id="myForm" >
             <InputLabel id="email-select-label">Email</InputLabel>
             <Select
                 labelId="email-select-label"
@@ -59,16 +73,21 @@ const BtnShare = (props) => {
                 onChange={(e) => { setEmailSL(e.target.value) }}
             >
                 {
-                    userList ? userList.map((ur) =>
-                        <MenuItem value={ur.email}>{ur.email}</MenuItem>
-                    ) : null
+
+                    userList.map((ur) =>
+
+                        <MenuItem value={ur.email}  >
+                            {/* {showEmail === undefined ? ur.email : null} */}
+                            {ur.email}
+                        </MenuItem>
+                    )
                 }
 
             </Select >
-
             {
                 emailSL !== undefined ?
                     <button className={styles.btnShare} onClick={() => handleShare(props.id, emailSL)}>Share</button>
+                    // <button className={styles.btnShare} onClick={myResetFunction}>Share</button>
                     : null
             }
         </FormControl>

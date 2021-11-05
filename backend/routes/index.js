@@ -25,5 +25,6 @@ router.get('/api/users/', withAuth, userController.getUsers)
 router.get('/api/users/:id', withAuth, userController.getOneUser);
 router.patch('/api/users/:id', withAuth, checkRole, userController.updateUser);
 router.delete('/api/users/:id', withAuth, checkRole, userController.deleteUser)
-
+router.post('/api/users/reset', userController.resetPass);
+router.post('/api/users/pagereset', userController.linkCheckReset)
 module.exports = router;

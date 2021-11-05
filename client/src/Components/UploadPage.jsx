@@ -25,7 +25,10 @@ const useStyles = makeStyles((theme) => ({
         padding: "10px"
     },
     doneText: {
-        margin: "10px"
+        margin: "10px",
+        color: "#3f51b5",
+        fontWeight: "900"
+
     },
     grid1: {
         marginBottom: "50px"
@@ -100,13 +103,9 @@ const UploadPage = () => {
             })
 
     }
-
-
     const handleCardReset = () => {
         dispatch(postFileSuccess(""))
     }
-
-
     return (
         <Grid container justify="center" >
             <Grid container align="center" direction="column" md={5} xs={10} className={classes.grid1}>
@@ -133,7 +132,7 @@ const UploadPage = () => {
                             <HighlightOffIcon onClick={handleCardReset} className={styles.cardCloseIcon} />
                         </div>
                         <Typography variant="h8" className={classes.doneText}>
-                            Image Preview
+                            Preview
                         </Typography>
                         <CardMedia component="img" image={img} alt=""></CardMedia>
                         <Typography variant="h5" className={classes.doneText}>

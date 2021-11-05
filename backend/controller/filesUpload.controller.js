@@ -45,8 +45,15 @@ const updateFile = async (req, res) => {
 
 const deleteFile = async (req, res) => {
     try {
-        const filePackage = await FileUpload.findByIdAndDelete(req.params.id).lean().exec()
-        return res.status(200).json({ status: 'success', data: filePackage })
+        const email = req.email;
+        const file = await FileUpload.findById(req.params.id)
+        if (email !== file.email) {
+            return res.status(403).json({ status: "fail", message: "Do not own to delete" })
+        } else {
+            const filePackage = await FileUpload.findByIdAndDelete(req.params.id).lean().exec()
+            return res.status(200).json({ status: 'success', data: filePackage })
+        }
+
     } catch (err) {
         return res.status(500).json({ status: 'fail', message: err.message })
     }
@@ -54,34 +61,41 @@ const deleteFile = async (req, res) => {
 
 const shareFile = async (req, res) => {
     const id = req.query[0];
-    const email = req.body;
-    const user = await UserUpload.findOne(email);
-    if (user !== null) {
-        try {
-            const fileFind = await FileUpload.findOne({ _id: id })
-            const arrayShared = fileFind.shared
-            if (arrayShared.includes(email.email) === true) {
-                return res.status(304).json({ message: "No" })
-            } else {
-                await FileUpload.findByIdAndUpdate({ _id: id }, { $push: { shared: email.email } }, { new: true });
-                return res.status(200).json({
-                    status: "success",
-                    message: "share success"
+    const email = req.body.email;
+    const file = await FileUpload.findById(id)
+    if (file.email !== req.body.emailCurrent) {
+        res.status(403).json({ status: "fail", message: "Must be the owner of the shared file" })
+    } else {
+        const user = await UserUpload.findOne({ email: email });
+        if (user !== null) {
+            try {
+                const fileFind = await FileUpload.findOne({ _id: id })
+                const arrayShared = fileFind.shared
+                if (arrayShared.includes(email) === true) {
+                    return res.status(304).json({ message: "No" })
+                } else {
+                    await FileUpload.findByIdAndUpdate({ _id: id }, { $push: { shared: email } }, { new: true });
+                    return res.status(200).json({
+                        status: "success",
+                        message: "share success"
+                    })
+                }
+
+            } catch (error) {
+                res.status(500).json({
+                    status: "fail",
+                    message: "Can't share"
                 })
             }
-
-        } catch (error) {
-            res.status(500).json({
+        } else {
+            return res.status(403).json({
                 status: "fail",
-                message: "Can't share"
+                message: "Email not found"
             })
         }
-    } else {
-        return res.status(403).json({
-            status: "fail",
-            message: "Email not found"
-        })
+
     }
+
 
 }
 module.exports = {

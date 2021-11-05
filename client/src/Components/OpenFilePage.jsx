@@ -1,22 +1,15 @@
-import React, { useState } from 'react';
-import { Button, CardMedia, Grid, Typography } from '@material-ui/core';
-import axios from 'axios';
+import React from 'react';
+import FileViewer from "react-file-viewer";
 const OpenFilePage = () => {
-    const [data, setData] = useState();
-    const id = window.location.href.split("?")[1]
-    const handleClick = async () => {
-        const res = await axios.get(`/api/files/:${id}`);
-        console.log(res);
-        setData(res.data)
-    }
+    const nameFile = window.location.href.split('?').reverse()[0]
+    const file = `http://localhost:8080/${nameFile}`;
+    const type = "docx";
+    const onError = e => {
+        console.log(e, "error in file-viewer");
+    };
     return (
-        <Grid container justify="center">
-            <Grid container direction="column" md={10} justify="center" alignItems="center">
-                <Typography variant="h5" style={{ fontWeight: "bold", color: "#283593", marginBottom: "10px" }}>Click to open file</Typography>
-                <Button variant="contained" color="primary" onClick={handleClick}>Open File</Button>
-                <CardMedia component="img" image={data} alt=""></CardMedia>
-            </Grid>
-        </Grid>
+        <FileViewer fileType={type} filePath={file} onError={onError} />
+
     )
 }
 

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-import { deleteUserFailure, deleteUserRequest, deleteUserSuccess } from '../Redux/auth/action';
-import { loadData } from '../utils/localStorage';
+import { deleteUserFailure, deleteUserRequest, deleteUserSuccess, getUserSuccess } from '../Redux/auth/action';
+import { loadData, saveData } from '../utils/localStorage';
 import { Button, Grid, Typography } from '@material-ui/core';
 import styles from "../Styles/Dashboard.module.css";
 import { Redirect, useHistory } from 'react-router-dom';
@@ -15,6 +15,17 @@ const ManageUser = () => {
     const dispatch = useDispatch()
     const [userList, setUserList] = useState([])
     const email = loadData("email")
+
+    if (email === null) {
+        saveData("email", "guest")
+    } else if (email !== "guest") {
+        let payload = {
+            isAuth: true,
+            name: loadData("name"),
+            email: loadData("email")
+        }
+        dispatch(getUserSuccess(payload))
+    }
     const isAuth = useSelector((state) => state.auth.isAuth)
     const history = useHistory();
     const handleDelete = (_id) => {

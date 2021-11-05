@@ -114,6 +114,10 @@ const Login = () => {
                     Don't have an account ?
                 </Typography>
                 <Button className={classes.secondBtn} variant="contained" color="primary" onClick={() => { history.push("/registration") }}>Create Account</Button>
+                <Grid className={styles.space} />
+                <Typography onClick={() => { history.push("/resetpass") }}>
+                    Forgot password ? Click here to reset
+                </Typography>
             </Grid>
             <Alert stack={{ limit: 1 }} />
         </Grid >

@@ -34,52 +34,52 @@ const EditUserPage = () => {
         getInfo()
     }, []);
     const handleClick = () => {
-        if (password !== confirmPassword) {
-            Alert.warning(`Password not match`, {
-                position: 'top-right',
-                effect: 'slide',
-                timeout: 1500
-            })
-        } else if (password === "") {
-            Alert.warning(`Pls enter password`, {
-                position: 'top-right',
-                effect: 'slide',
-                timeout: 1500
-            })
-        } else {
-            let config = {
-                "name": name,
-                "email": email,
-                "role": role,
-                "password": password
-            }
+        // if (password !== confirmPassword) {
+        //     Alert.warning(`Password not match`, {
+        //         position: 'top-right',
+        //         effect: 'slide',
+        //         timeout: 1500
+        //     })
+        // } else if (password === "") {
+        //     Alert.warning(`Pls enter password`, {
+        //         position: 'top-right',
+        //         effect: 'slide',
+        //         timeout: 1500
+        //     })
+        // } else {
+        let config = {
+            "name": name,
+            "email": email,
+            "role": role,
+            // "password": password
+        }
 
-            axios.patch(`/api/users/:${id}`, config)
-                .then((res) => {
-                    console.log("res mail:", res.data.data);
-                    if (res.status === 200) {
-                        Alert.success(`Edit User Success`, {
-                            position: 'top-right',
-                            effect: 'slide',
-                            timeout: 1500
-                        })
-                    } else {
-                        Alert.error(`Fail To Edit User`, {
-                            position: 'top-right',
-                            effect: 'slide',
-                            timeout: 1500
-                        })
-                    }
-                })
-                .catch((err) => {
-                    Alert.error(`Must be Admin to edit`, {
+        axios.patch(`/api/users/:${id}`, config)
+            .then((res) => {
+                console.log("res mail:", res.data.data);
+                if (res.status === 200) {
+                    Alert.success(`Edit User Success`, {
                         position: 'top-right',
                         effect: 'slide',
                         timeout: 1500
                     })
-                    console.log(err);
+                } else {
+                    Alert.error(`Fail To Edit User`, {
+                        position: 'top-right',
+                        effect: 'slide',
+                        timeout: 1500
+                    })
+                }
+            })
+            .catch((err) => {
+                Alert.error(`Must be Admin to edit`, {
+                    position: 'top-right',
+                    effect: 'slide',
+                    timeout: 1500
                 })
-        }
+                console.log(err);
+            })
+        // }
     }
     return (
         <Grid container justify="center" className={styles.loginWrapper}>
@@ -131,7 +131,7 @@ const EditUserPage = () => {
                     </Select>
                 </FormControl>
                 <Grid className={styles.space} />
-                <TextField
+                {/* <TextField
                     type="password"
                     id="outlined-primary"
                     variant="outlined"
@@ -150,7 +150,7 @@ const EditUserPage = () => {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                 />
-                <Grid className={styles.space} />
+                <Grid className={styles.space} /> */}
                 <Button variant="contained" color="primary" onClick={handleClick}>Edit</Button>
                 <Grid className={styles.space} />
                 <Button variant="contained" color="primary" onClick={() => history.push('/manageUser')}>Return</Button>
