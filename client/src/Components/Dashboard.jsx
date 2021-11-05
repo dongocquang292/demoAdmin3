@@ -130,8 +130,8 @@ const Dashboard = () => {
 
                     <Grid container md={10} sm={10} xs={10} justify="center">
                         <Grid container justify="center" className={styles.header}>
-                            <Grid container justify="flex-start" md={2} sm={2} xs={2} className={styles.header_option}> Thumbnail</Grid>
-                            <Grid container justify="flex-start" md={1} sm={1} xs={1} className={styles.header_option}> File Name</Grid>
+                            <Grid container justify="flex-start" md={1} sm={1} xs={1} className={styles.header_option}> Thumbnail</Grid>
+                            <Grid container justify="flex-start" md={2} sm={2} xs={2} className={styles.header_option}> File Name</Grid>
                             <Grid container justify="flex-start" md={1} sm={1} xs={1} className={styles.header_option}> Size</Grid>
                             <Grid container justify="flex-start" md={2} sm={2} xs={2} className={styles.header_option}> Auth</Grid>
                             <Grid container justify="center" md={2} sm={2} xs={2} className={styles.header_option}> Open File</Grid>
@@ -142,13 +142,13 @@ const Dashboard = () => {
                             fileList ? fileList.map((el) =>
 
                                 <Grid container md={12} >
-                                    <Grid className={styles.listItem} container alignItems="center" justify="flex-start" md={2} sm={2} xs={2}>
+                                    <Grid className={styles.listItem} container alignItems="center" justify="flex-start" md={1} sm={1} xs={1}>
                                         {
                                             el.type === "image" ? <img src={`http://localhost:8080/${el.fileName}`} alt="" className={styles.thumbnail}></img> : <img src={`http://localhost:8080/imgAplication.png`} alt="" className={styles.thumbnail}></img>
                                         }
 
                                     </Grid>
-                                    <Grid className={styles.listItem} container alignItems="center" justify="flex-start" md={1} sm={1} xs={1}>{el.fileName}</Grid>
+                                    <Grid className={styles.listItem} container alignItems="center" justify="flex-start" md={2} sm={2} xs={2}>{el.fileName}</Grid>
                                     <Grid className={styles.listItem} container alignItems="center" justify="flex-start" md={1} sm={1} xs={1}>{checkSize(el.fileSize)}</Grid>
                                     <Grid className={styles.listItem} container alignItems="center" justify="flex-start" md={2} sm={2} xs={2}>{el.email}</Grid>
                                     <Grid className={styles.listItem} container justify="center" md={2} sm={2} xs={2}>
