@@ -7,7 +7,6 @@ module.exports = {
     filename: '[name].js',
     path: path.join(__dirname, '../dist'),
     publicPath: '/',
-    clean: true // xoa di nhung file thua
   },
   watch: true,// đây là watch mode
   devServer: {
@@ -16,7 +15,10 @@ module.exports = {
     hot: true,
   },
   resolve: {
-    extensions: ['.js', '.json', '.jsx', '.css']
+    extensions: ['.js', '.json', '.jsx', '.css'],
+    fallback: {
+      "fs": false
+    },
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -41,8 +43,10 @@ module.exports = {
       },
       {
         test: /\.(jpg|png|woff|woff2|eot|ttf|svg)$/,
-        use: 'file-loader?limit=100000',
-      },
+        exclude: /node_modules/,
+        // use: 'file-loader?limit=100000',
+        use: ['file-loader?name=[name].[ext]']
+      }
     ],
   },
 }

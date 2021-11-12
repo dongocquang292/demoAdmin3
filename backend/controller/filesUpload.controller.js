@@ -1,4 +1,4 @@
-const e = require("express");
+
 const { FileUpload } = require("../model/filesUpload.model")
 const { UserUpload } = require("../model/user.model")
 const getFiles = async (req, res) => {
@@ -12,12 +12,17 @@ const getFiles = async (req, res) => {
 
 const UploadFile = async (req, res) => {
     try {
-        const email = req.body.email;
-        const fileName = req.file.originalname
-        const fileSize = req.file.size
-        const typeFile = req.file.mimetype.split("/")
-        const filePackage = await FileUpload.create({ email: email, fileName: fileName, fileSize: fileSize, type: typeFile[0], shared: email });
-        return res.status(200).json({ status: 'success', data: filePackage, img: `http://localhost:8080/${fileName}` })
+        if (req.file !== undefined) {
+            const email = req.body.email;
+            const fileName = req.file.originalname
+            const fileSize = req.file.size
+            const typeFile = req.file.mimetype.split("/")
+            const filePackage = await FileUpload.create({ email: email, fileName: fileName, fileSize: fileSize, type: typeFile[0], shared: [] });
+            return res.status(200).json({ status: 'success', data: filePackage, img: `http://localhost:8080/${fileName}` })
+        } else {
+            return res.status(403).json({ status: 'fail', message: 'Pls select file' })
+        }
+
     } catch (err) {
         return res.status(500).json({ status: 'fail', message: err.message })
     }
@@ -77,7 +82,8 @@ const shareFile = async (req, res) => {
                     await FileUpload.findByIdAndUpdate({ _id: id }, { $push: { shared: email } }, { new: true });
                     return res.status(200).json({
                         status: "success",
-                        message: "share success"
+                        message: "share success",
+
                     })
                 }
 
@@ -95,9 +101,25 @@ const shareFile = async (req, res) => {
         }
 
     }
+}
 
+const deleteShared = async (req, res) => {
+    try {
+        const emailDS = req.body.emailDS;
+        const id = req.body.idFile;
+        const file = await FileUpload.findById({ _id: id })
+        const arrShared = file.shared
+        const index = arrShared.indexOf(emailDS)
+        if (index > -1) {
+            arrShared.splice(index, 1);
+        }
 
+        await FileUpload.findByIdAndUpdate({ _id: id }, { shared: arrShared }, { new: true })
+        res.status(200).json({ status: "success", message: "Deleted Share", newShared: arrShared })
+    } catch (error) {
+        res.status(400).json({ status: "fail", message: `Can't Delete Share` })
+    }
 }
 module.exports = {
-    getFiles, UploadFile, getOneFile, updateFile, deleteFile, shareFile
+    getFiles, UploadFile, getOneFile, updateFile, deleteFile, shareFile, deleteShared
 }

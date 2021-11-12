@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from "axios"
+
 import TextField from '@material-ui/core/TextField';
 import styles from "../Styles/Form.module.css";
 import { Button, Grid } from '@material-ui/core';
@@ -7,6 +7,9 @@ import Alert from 'react-s-alert';
 import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/slide.css';
 import { useHistory } from 'react-router-dom';
+import { apiPageReset } from '../api/user';
+import { alertError, alertSuccess } from '../utils/alert';
+import { CHANGEPASSFAIL } from '../utils/messAlert';
 
 const PageReset = () => {
     const [password, setPassword] = useState("")
@@ -20,26 +23,17 @@ const PageReset = () => {
             "password": password
         }
         if (password !== confirmPassword) {
-            Alert.error(`Password not match`, {
-                position: 'top-right',
-                effect: 'slide',
-                timeout: 1500
-            })
+            let mess3 = `Password not match`
+            alertError(mess3)
         } else {
-            await axios.post("api/users/pagereset", config).then((res) => {
+            apiPageReset(config).then((res) => {
+                // message
+                let mess1 = `${res.data.message}`
                 if (res.status === 200) {
-                    Alert.success(`${res.data.message}`, {
-                        position: 'top-right',
-                        effect: 'slide',
-                        timeout: 1500
-                    })
+                    alertSuccess(mess1)
                     redirectPage()
                 } else {
-                    Alert.error(`Can't not change password`, {
-                        position: 'top-right',
-                        effect: 'slide',
-                        timeout: 1500
-                    })
+                    alertError(CHANGEPASSFAIL)
                 }
             })
                 .catch((err) => console.log(err))
@@ -52,8 +46,8 @@ const PageReset = () => {
         }, 1500);
     }
     return (
-        <Grid container justify="center" className={styles.loginWrapper}>
-            <Grid className={styles.loginCard} container align="center" direction="column" md={3} sm={5} xs={9}>
+        <Grid container justifyContent="center" item={true} className={styles.loginWrapper}>
+            <Grid className={styles.loginCard} item={true} container align="center" direction="column" md={3} sm={5} xs={9}>
 
                 <TextField
                     type="password"

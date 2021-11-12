@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { postUserFailure, postUserRequest, postUserSuccess } from '../Redux/auth/action';
 import { Redirect, useHistory } from "react-router-dom";
 import TextField from '@material-ui/core/TextField';
 import styles from "../Styles/Form.module.css";
 import { Box, Button, Grid, makeStyles, Typography } from '@material-ui/core';
+import { apiRegister } from '../api/user';
 
 const useStyles = makeStyles((theme) => ({
     secondBtn: {
@@ -38,13 +38,13 @@ const Registration = () => {
                 "password": password
             }
             dispatch(postUserRequest())
-            axios.post('/api/users', userData)
-                .then((res) => {
-                    dispatch(postUserSuccess())
-                    redirectToLogin()
-                }).catch = (err) => {
-                    dispatch(postUserFailure())
-                }
+
+            apiRegister(userData).then((res) => {
+                dispatch(postUserSuccess())
+                redirectToLogin()
+            }).catch = (err) => {
+                dispatch(postUserFailure())
+            }
         }
     }
 
@@ -59,9 +59,9 @@ const Registration = () => {
     }
 
     return (
-        <Grid container justify="center" className={styles.regWrapper}>
+        <Grid container justifyContent="center" className={styles.regWrapper}>
 
-            <Grid className={styles.loginCard} container align="center" direction="column" md={3} sm={5} xs={9}>
+            <Grid className={styles.loginCard} item={true} container align="center" direction="column" md={3} sm={5} xs={9}>
                 <TextField
                     id="outlined-primary"
                     variant="outlined"

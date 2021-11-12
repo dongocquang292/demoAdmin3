@@ -7,9 +7,10 @@ import { NotFound } from '../Components/NotFound';
 import { Registration } from '../Components/Registration';
 import { UploadPage } from '../Components/UploadPage';
 import { EditUserPage } from '../Components/EditUserPage';
-import { OpenFilePage } from '../Components/OpenFilePage';
 import { ResetPass } from '../Components/ResetPass';
 import { PageReset } from '../Components/PageReset';
+import { OpenPdf } from '../Components/OpenPdf';
+import { DocsViewer } from '../Components/DocViewer';
 const Allroutes = () => {
     return (
 
@@ -23,7 +24,9 @@ const Allroutes = () => {
                 <Route exact path="/registration" component={Registration} />
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/edit" component={EditUserPage} />
-                <Route exact path="/open" component={OpenFilePage} />
+                {/* <Route exact path="/open" component={OpenFilePage} /> */}
+                <Route exact path="/openDocs" component={DocsViewer} />
+                <Route exact path="/openPdf" component={OpenPdf} />
                 <Route exact path="/resetpass" component={ResetPass} />
                 <Route exact path="/pagereset" component={PageReset} />
                 <Route component={NotFound} />

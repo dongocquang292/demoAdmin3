@@ -27,7 +27,6 @@ const initialState = {
 }
 
 const reducer = (state = initialState, { type, payload }) => {
-
     switch (type) {
         case POST_FILE_REQUEST:
             return {

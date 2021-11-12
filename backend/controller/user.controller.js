@@ -65,7 +65,7 @@ const login = async (req, res) => {
                     email: user.email,
                     message: "User Authenticated Successfully"
                 }
-                return res.cookie('token', token, { httpOnly: true }).status(200).json({ status: 'success', data })
+                return res.status(200).json({ status: 'success', data, token: token })
 
             } else {
                 let data = {
@@ -83,12 +83,12 @@ const login = async (req, res) => {
 // Update User
 const updateUser = async (req, res) => {
     try {
-        const id = (req.params.id).split(':')[1]
+        const id = (req.params.id)
         bcrypt.hash(req.body.password, 10, function (err, hash) {
             let userbody = {
                 "name": req.body.name,
                 "email": req.body.email,
-                "role": req.body.role,
+                "role": req.body.role
                 // "password": hash
             }
             const user = UserUpload.findByIdAndUpdate(id, userbody, { new: true }).lean().exec()
@@ -181,6 +181,7 @@ const linkCheckReset = async (req, res) => {
         res.status(400).json({ status: "fail", message: "Error" })
     }
 }
+
 module.exports = {
     register, login, getUsers, getOneUser, updateUser, deleteUser, resetPass, linkCheckReset
 }

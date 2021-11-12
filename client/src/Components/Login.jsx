@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from "axios"
+
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserFailure, getUserRequest, getUserSuccess } from '../Redux/auth/action';
 import { saveData } from '../utils/localStorage';
@@ -10,6 +10,9 @@ import { Box, Button, Grid, makeStyles, Typography } from '@material-ui/core';
 import Alert from 'react-s-alert';
 import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/slide.css';
+import { apiLogin } from '../api/user';
+import { alertError } from '../utils/alert';
+import { LOGINFAIL } from '../utils/messAlert';
 const useStyles = makeStyles((theme) => ({
     secondBtn: {
         backgroundColor: "#43A047",
@@ -39,34 +42,26 @@ const Login = () => {
         }
 
         dispatch(getUserRequest())
-        axios.post("/api/users/login", config)
-            .then((res) => {
-                let response = res.data.data.response
-                let name = res.data.data.name
-                if (response === true) {
-                    let payload = {
-                        isAuth: true,
-                        name: name,
-                        email: email
-                    }
-                    dispatch(getUserSuccess(payload))
-                    saveData("email", email)
-                    saveData("name", name)
-                    // swal("Login success", "success", window.close(1000));
-                    // Alert.success('Login success', {
-                    //     position: 'top-right',
-                    //     effect: 'slide',
-                    //     timeout: 1500
-                    // })
-                    redirectPage()
+
+        apiLogin(config).then((res) => {
+            let response = res.data.data.response
+            let name = res.data.data.name
+            if (response === true) {
+                let payload = {
+                    isAuth: true,
+                    name: name,
+                    email: email
                 }
-            })
+                dispatch(getUserSuccess(payload))
+                saveData("email", email)
+                saveData("name", name)
+                localStorage.setItem("token", res.data.token);
+
+                redirectPage()
+            }
+        })
             .catch((err) => {
-                Alert.error('Login fail', {
-                    position: 'top-right',
-                    effect: 'slide',
-                    timeout: 1500
-                })
+                alertError(LOGINFAIL)
                 console.log(err);
                 dispatch(getUserFailure(err))
             })
@@ -83,9 +78,8 @@ const Login = () => {
     }
 
     return (
-        <Grid container justify="center" className={styles.loginWrapper}>
-            <Grid className={styles.loginCard} container align="center" direction="column" md={3} sm={5} xs={9}>
-
+        <Grid container item={true} justifyContent="center" className={styles.loginWrapper}>
+            <Grid className={styles.loginCard} item={true} container align="center" direction="column" md={3} sm={5} xs={9}>
                 <TextField
                     id="outlined-primary"
                     variant="outlined"
@@ -104,9 +98,7 @@ const Login = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
-
                 <Grid className={styles.space} />
-
                 <Button variant="contained" color="primary" onClick={handleClick}>Login</Button>
                 <Box className={styles.divider} />
                 <Grid className={styles.space} />

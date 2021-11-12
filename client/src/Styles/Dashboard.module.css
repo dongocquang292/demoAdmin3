@@ -19,7 +19,7 @@
 }
 .dialog {
     box-shadow: 0 8px 6px -6px black;
-    position: static;
+    position: absolute;
     left: 20%;
     top: 10%;
   }
@@ -55,7 +55,7 @@
 
 
 .btnShare{
-    width: 183px;
+    width: 180px;
     height: 40px;
     color: white;
     background-color: #3f51b5;
@@ -71,4 +71,46 @@
     line-height: 1.75;
     letter-spacing: 0.02857em;
     text-transform: uppercase;
+}
+
+.listUser {
+    padding-top: 30px;
+    border-bottom: 2px solid #1565C0;
+    background-color: rgb(219, 232, 255);
+
+}
+
+
+.formListShared {
+    padding-top: 20px;
+    width: 140px;
+}
+
+.formShare{
+    padding-top: 25px;
+    width: 180px;
+}
+.viewPdf{
+    display: flex;
+    align-items: center;
+    width: 900px;
+    height: 1000px;
+}
+.audioBox{
+    margin-top: 80px;
+    margin-left: 600px;
+    width: 400x;
+    height: 370px;
+}
+.imgAudio{
+    margin-top: 50px;
+    margin-left: 70px;
+    width: 150px;
+    height: 150px;
+}
+.h3Title{
+    text-align: center;
+}
+.audioFile{
+    margin-top: 50px;
 }

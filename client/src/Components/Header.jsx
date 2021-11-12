@@ -59,12 +59,12 @@ function Header() {
   };
 
   return (
-    <Grid container justify="space-between" alignItems="center" className={classes.wrapper} >
+    <Grid container justifyContent="space-between" alignItems="center" className={classes.wrapper} >
       {
         <Drawer anchor="left" open={drawerState} onClose={toggleDrawer}>
           <List className={classes.drawer} >
-            <ListItem>
-              <Grid md>
+            <ListItem >
+              <Grid item={true}>
                 <Typography>
                   <b>Email</b>: {email || "unknown"}
                 </Typography>
@@ -93,20 +93,20 @@ function Header() {
       {
         authloading || apploading ? <LoadingSpiner /> : null
       }
-      <Grid container justify="flex-start" md={4} sm={2} xs={3} className={classes.icon}>
+      <Grid container item={true} justifyContent="flex-start" md={4} sm={2} xs={3} className={classes.icon}>
         <MenuIcon className={classes.menuIcon} onClick={toggleDrawer} />
       </Grid>
-      <Grid container justify="center" md={4} sm={2} xs={3} className={classes.sitename}>
+      <Grid container item={true} justifyContent="center" md={4} sm={2} xs={3} className={classes.sitename}>
         <p className={styles.siteName}>
           Demo Admin
         </p>
       </Grid>
       {
         !isAuth ?
-          <Grid container md={4} sm={2} xs={3} justify="flex-end" className={classes.loginBtn}>
+          <Grid container item={true} md={4} sm={2} xs={3} justifyContent="flex-end" className={classes.loginBtn}>
             <Button variant="contained" color="primary" onClick={() => { history.push("/login") }}>Login</Button>
           </Grid> :
-          <Grid container md={4} sm={2} xs={3} justify="flex-end" className={classes.loginBtn}>
+          <Grid container item={true} md={4} sm={2} xs={3} justifyContent="flex-end" className={classes.loginBtn}>
             <Logout />
           </Grid>
       }

@@ -6,12 +6,14 @@ const indexRoute = require("./routes/index");
 const cookieParser = require('cookie-parser');
 global.__basedir = __dirname;
 
-
+console.log(__dirname);
 app.use(express.static('public'));
-
+app.use(express.static('public/icon'));
+app.use(express.static('public/images'));
 // static webpack
 app.use(express.static(path.join(__dirname, '../dist')))
-
+app.use(express.static(path.join(__dirname, '../client/build')))
+// server.use(express.static(path.join(__dirname, '/../client/build')));
 
 app.use(cors());
 app.use(cookieParser());
@@ -26,8 +28,8 @@ app.use("/", indexRoute)
 
 // handle every other route with index.html, which will contain
 // a script tag to your application's JavaScript file(s).
-app.get('/*', function (request, response) {
-  response.sendFile(path.join(__dirname, '../dist/index.html'))
+app.get('/*', function (req, res) {
+  res.sendFile(path.join(__dirname, '../dist/index.html'))
 })
 
 // error handler middleware

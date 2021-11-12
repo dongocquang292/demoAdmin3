@@ -6,7 +6,8 @@ const userController = require('../controller/user.controller');
 const withAuth = require("../middleware/authJwt");
 const checkRole = require("../middleware/checkRole")
 
-router.get('/', (res, req) => {
+
+router.get('/', (req, res) => {
     res.sendFile('http://localhost:8080/index.html')
 })
 
@@ -16,7 +17,8 @@ router.get('/api/files/', withAuth, fileController.getFiles);
 router.get('/api/files/:id', withAuth, fileController.getOneFile);
 router.patch('/api/files/:id', withAuth, fileController.updateFile);
 router.delete('/api/files/:id', withAuth, fileController.deleteFile);
-router.post('/api/files/share', withAuth, fileController.shareFile)
+router.post('/api/files/share', withAuth, fileController.shareFile);
+router.post('/api/files/deleteShared', withAuth, fileController.deleteShared)
 
 // users
 router.post('/api/users/', userController.register);
