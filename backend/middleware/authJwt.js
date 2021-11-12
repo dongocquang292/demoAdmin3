@@ -7,7 +7,6 @@ const withAuth = function (req, res, next) {
     const authorization = req.headers.token
     const token = authorization.replace('Bearer ', '')
     if (!token) {
-        console.log(123);
         res.status(401).send('Unauthorized: No token provided');
     } else {
 
