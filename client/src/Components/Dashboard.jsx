@@ -139,7 +139,7 @@ const Dashboard = () => {
         })
             .catch((err) => {
                 console.log(err);
-                alertError(CANTGETLISTUSER);
+                // alertError(CANTGETLISTUSER);
             })
     }
 
@@ -152,7 +152,7 @@ const Dashboard = () => {
         })
             .catch((err) => {
                 console.log(err);
-                alertError(CANTGETLISTFILE)
+                // alertError(CANTGETLISTFILE)
             })
 
     }
