@@ -192,7 +192,6 @@ const Dashboard = () => {
     if (email !== "guest" && fileList.length === 0) {
         getList()
     }
-    console.log("file list: ", fileList);
     return (
         <Grid container item={true} justifyContent="center">
             {
