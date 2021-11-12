@@ -15,9 +15,10 @@ import { apiDeleteFile, apiGetFile } from '../api/file';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import { alertError } from '../utils/alert';
-import { CANTGETLISTFILE, CANTGETLISTUSER } from '../utils/messAlert';
+import { CANTGETLISTFILE, CANTGETLISTUSER, OWNER } from '../utils/messAlert';
 import FileViewer from "react-file-viewer";
 import DocViewer, { DocViewerRenderers } from "react-doc-viewer";
+import { apiGetAllUser } from '../api/user';
 
 const Dashboard = () => {
     const dispatch = useDispatch()
@@ -118,7 +119,7 @@ const Dashboard = () => {
             })
             .catch((err) => {
                 console.log(err);
-                alertError(CANTGETLISTFILE)
+                alertError(OWNER)
             })
 
     }
@@ -130,12 +131,12 @@ const Dashboard = () => {
     }
     // getList User
     const getListUser = async () => {
-        await axios.get("/api/users/", configGetList)
-            .then((res) => {
-                const newUser = res.data.dataUser
-                setUserList(newUser)
 
-            })
+        await apiGetAllUser(configGetList).then((res) => {
+            const newUser = res.data.dataUser
+            setUserList(newUser)
+
+        })
             .catch((err) => {
                 console.log(err);
                 alertError(CANTGETLISTUSER);
@@ -143,7 +144,7 @@ const Dashboard = () => {
     }
 
     const getList = async () => {
-        apiGetFile(configGetList).then((res) => {
+        await apiGetFile(configGetList).then((res) => {
             const dataRes = res.data.data;
             const dataFilter = dataRes.filter((el) => el.email === email || el.shared.includes(email) === true)
             setFileList(dataFilter)

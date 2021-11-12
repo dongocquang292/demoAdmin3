@@ -25,3 +25,4 @@ export const apiResetPass = async (config) => {
 export const apiPageReset = async (config) => {
     return await axios.post("api/users/pagereset", config)
 }
+
